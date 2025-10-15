@@ -1,68 +1,64 @@
-const convertbutton = document.querySelector(".button")
-const seletorDeMoedas = document.querySelector(".seletor-de-moeda")
+const convertbutton = document.querySelector(".button");
+const seletorDeMoedas = document.querySelector(".seletor-de-moeda");
 
-function covertValues(){
-    const valorDoinput = document.querySelector(".valordoinput").value
-    const valoraconvert = document.querySelector(".moeda-real")
-    const valorconvertido = document.querySelector(".moeda-dolar")
-    
-    const dolarhoje = 5.7
-    const eurohoje = 6.37
-    const librahoje = 7.52
+async function covertValues() {
+  const valorDoinput = document.querySelector(".valordoinput").value;
+  const valoraconvert = document.querySelector(".moeda-real");
+  const valorconvertido = document.querySelector(".moeda-dolar");
 
-     if(seletorDeMoedas.value == "Dolar"){
-     valorconvertido.innerHTML = new Intl.NumberFormat("en-US",{
-        style: "currency",
-        currency: "USD"
-    }).format(valorDoinput / dolarhoje)
+  const data = await fetch(
+    "https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL"
+  ).then((Response) => Response.json());
+  const dolarhoje = data.USDBRL.high;
+  const eurohoje = data.EURBRL.high;
+  const Bitcoin = data.BTCBRL.high;
 
-     }
-    if(seletorDeMoedas.value == "Euro"){
-        valorconvertido.innerHTML = new Intl.NumberFormat("de-DE",{
-        style: "currency",
-        currency: "EUR"
-    }).format(valorDoinput / eurohoje)
+  if (seletorDeMoedas.value == "Bitcoin") {
+    valorconvertido.innerHTML = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "BTC",
+    }).format(valorDoinput / Bitcoin);
+  }
+  if (seletorDeMoedas.value == "Dolar") {
+    valorconvertido.innerHTML = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(valorDoinput / dolarhoje);
+  }
+  if (seletorDeMoedas.value == "Euro") {
+    valorconvertido.innerHTML = new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+    }).format(valorDoinput / eurohoje);
+  }
 
-    }
-
-    if(seletorDeMoedas.value == "Libra"){
-        valorconvertido.innerHTML = new Intl.NumberFormat("en-GB",{
-        style: "currency",
-        currency: "GBP"
-    }).format(valorDoinput / librahoje)
-
-
-    }
-
-    valoraconvert.innerHTML = new Intl.NumberFormat("pt-br",{
-       style: "currency",
-       currency: "BRL"
-     }).format(valorDoinput)   
+  valoraconvert.innerHTML = new Intl.NumberFormat("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  }).format(valorDoinput);
 }
 
- function mudarDEmoeda(){
-    const nomeDAMoeda = document.getElementById("nome-da-moeda")
-    const imgmoeda = document.querySelector(".img-moeda")
+function mudarDEmoeda() {
+  const nomeDAMoeda = document.getElementById("nome-da-moeda");
+  const imgmoeda = document.querySelector(".img-moeda");
 
-    if (seletorDeMoedas.value == "Dolar"){
-     nomeDAMoeda.innerHTML = "Dolar Americano" 
-     imgmoeda.src = "./assests/estados-unidos (1) 1.jpg"
-    
-    }
+  if (seletorDeMoedas.value == "Dolar") {
+    nomeDAMoeda.innerHTML = "Dolar Americano";
+    imgmoeda.src = "./assests/estados-unidos (1) 1.jpg";
+  }
 
-    if (seletorDeMoedas.value == "Euro"){
-        nomeDAMoeda.innerHTML = "Euro"
-        imgmoeda.src = "./assests/Design sem nome 3.png"
-    }
+  if (seletorDeMoedas.value == "Euro") {
+    nomeDAMoeda.innerHTML = "Euro";
+    imgmoeda.src = "./assests/Design sem nome 3.png";
+  }
 
-if (seletorDeMoedas.value == "Libra"){
-    nomeDAMoeda.innerHTML = "Libra"
-    imgmoeda.src = "assests/libra 1.png"
+  if (seletorDeMoedas.value == "Bitcoin") {
+    nomeDAMoeda.innerHTML = "Bitcoin";
+    imgmoeda.src = "assests/bitcoin 1.png";
+  }
+
+  covertValues();
 }
 
-
-    covertValues()
- }
-
-seletorDeMoedas.addEventListener("change", mudarDEmoeda)
-convertbutton.addEventListener("click", covertValues )
+seletorDeMoedas.addEventListener("change", mudarDEmoeda);
+convertbutton.addEventListener("click", covertValues);
